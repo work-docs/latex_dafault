@@ -1,4 +1,4 @@
-TARGET = lab-01.pdf
+TARGET = LAB.pdf
 
 BIBTEX = bibtex
 LATEX = latex
