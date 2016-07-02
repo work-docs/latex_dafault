@@ -32,6 +32,45 @@ com o \textit{hardware} (kernel space).
 
 \subsubsection{USB Driver}
 
+Em um sistema operacional Linux, um dispositivo USB sempre será detectado quando inserido.
+A detecção em nível de \textit{hardware} é feito pela controladora de USB - \textit{USB Host Controller}. A controladora
+correspondênte irá enviar as informações da camada \textit{low-level} para a camada \textit{higher-level} que contém
+as especificações do protocolo USB. As especificações de protocolo transformam as infomações recebidas
+sobre o dispositivo e os propaga para a camada de USB genérica - \textit{USB Core} - definida no espaço
+do kernel. Nesse ponto, o device é detectado mesmo sem haver um \textit{driver} associado específicamente a ele.
+
+\begin{figure}[H]
+  \centering
+  \caption{Camadas do sistema USB Linux}
+  \label{fig:usblinux}
+  \includegraphics[width=0.9\textwidth]{figure/usbgeral.eps}
+\end{figure}
+
+Um dispositívo válido de USB tem uma estrutura composta por: \textit{configurations, interface e endpoints}.
+\begin{itemize}
+  \item \textbf{Configurations}: é o perfil do dispositivo;
+  \item \textbf{Interface}: corresponde a funcionalidade do dispositívo;
+  \item \textbf{Endpoint}: são como \textit{pipes} que transferem informações para o dispositívo ou para o computador.
+\end{itemize}
+
+O ambiente Linux suporta apenas uma \textit{configuration} por dispositivo. Para cada \textit{configuration}, o dispositivo
+pode tem uma ou mais \textit{interface}. Como dito, uma \textit{interface} representa uma funcionalidade do dispositivo,
+por exemplo, uma impressora multifuncional tem as funções de imprimir, scanner e fax. Portanto, um
+dispositivo USB, ao contrário de outros dispositivos, é associado por \textit{interface} ao invés do dispositivo
+como um todo. Em resumo, um dispositivo USB pode tem vários drivers e várias \textit{interfaces} podem ter o
+mesmo driver. E para cada \textit{interface} tem-se vários \textit{endpoints}. A figura \ref{fig:usbdevice} mostra essa
+estrutura.
+
+\begin{figure}[H]
+  \centering
+  \caption{Estrutura de um dispositivo.}
+  \label{fig:usbdevice}
+  \includegraphics[width=0.9\textwidth]{figure/usbdevice.eps}
+\end{figure}
+
+Na seção \ref{utils} será mostrado algumas aplicações que são utilizadas para identificar
+as informações de um dispositivo USB.
+
 \subsection{Vírus}
 
 \begin{itemize}
@@ -98,6 +137,23 @@ seu status de implementação da solução proposta.
 \section{Descrição da Solução}
 
 A solução proposta consta com a leitura de um device driver para um mouse USB.
+
+\subsection{Comandos de Suporte}
+\label{util}
+Durante a construção de um \textit{device driver} existem algumas aplicações e comandos que facilitam
+a obtenção de informações sobre o dispositivo e o \textit{driver}.
+
+%TODO: adicionar os comandos de
+% lsusb
+%   lsusb -vd vendorID:prodID
+% lsmod
+% insmod
+% rmmod
+% cat /proc/kallsyms
+
+\subsection{Funções da API}
+
+
 
 \section{Conclusão}
 %TODO: opniões sobre o projetom
