@@ -30,6 +30,27 @@ Em resumo, kernel oferece subrotinas ou funções para as aplicações \textit{e
 com o \textit{hardware} (user space), mas também oferece funções para a comunicação baixo nível do sistema
 com o \textit{hardware} (kernel space).
 
+\subsubsection{USB Driver}
+
+\subsection{Vírus}
+
+\begin{itemize}
+  \item \textbf{Vírus de \textit{Boot}}: o vírus de boot foi um dos primeiros vírus a surgirem no mundo,
+    ele foi criado com o objetivo de danificar o setor de inicialização do disco rígido,
+    no qual a sua forma de propagação era através de um disquete contaminado. O vírus se
+    alojava no primeiro setor do disco flexível e ocupava cerca de 1k ou menos em um
+    disquete que era de 360k mais ou menos. Na inicialização do boot com o disquete
+    contaminado, o vírus se aloja na memória no endereço 0000:7C00h da bios e começa
+    a se auto-executar , prejudicando assim a inicialização do computador
+
+  \item \textbf{Vírus de Macro}: o vírus macro encontrado-se frequentemente em documentos ou é
+    inserido em códigos maliciosos em programas de processamento de texto, podendo ter
+    origem em docs anexados ou em e-mails, no qual o vírus pode ser transferido para o
+    computador depois de clicar em ligações de “phishing” ou mesmo em propagandas. Esses
+    vírus são difíceis de serem identificados e o seu maior risco é que tem uma grande
+    capacidade de se propagar, no qual eles podem causar danificações nos documentos infectados.
+\end{itemize}
+
 \section{Descrição do Problema}
 
 Dentro do contexto de \textit{device drivers}, existe o aspecto de segurança do sistema operacional.
@@ -40,6 +61,24 @@ No caso deste projeto, o vírus será direcionado para um \textit{driver} constr
 este objetivo, contendo dois comportamentos: normal e anormal, para apresentar o
 funcionamento do vírus.
 
+\section{Metodologia}
+
+O grupo adotou reuniões presenciais e remotas para desenvolvimento do trabalho. A partir
+disso algumas ferramentas foram utilizadas para que se pudesse desenvolver o trabalho em
+equipe. As ferramentas foram:
+
+\begin{itemize}
+  \item Google hangout;
+  \item Tmate;
+  \item Github;
+\end{itemize}
+
+O Google hangout fora utilizado em conjunto com o tmate para provimento de reuniões remotas
+e compartilhamento do terminal respectivamente. O tmate com seu compartilhamento de terminal
+via ssh permite todos integrantes tenham acesso á um terminal único em tempo real. Desse modo,
+o pareamento remoto torna-se facilitado. O Github é utilizado como ferramento de versionamento
+de código. 
+
 \section{\textit{Checklist} de Requisitos}
 
 A lista abaixo contem os requisitos espeficicados para o laboratório e o
@@ -47,17 +86,18 @@ seu status de implementação da solução proposta.
 
 \begin{itemize}
   \item (  ) Estudo sobre Vírus: tipos de vírus e vermes, como eles se disseminam;
-  \item (  ) Estudo sobre \textit{Device Drivers}: funcionamento e como construir;
-  \item (  ) Tutorial da construção do \textit{Device Drivers} (Anexo A);
+  \item (OK) Estudo sobre \textit{Device Drivers}: funcionamento e como construir;
+  \item (OK) Tutorial da construção do \textit{Device Drivers} (Anexo A);
   \item (  ) Propor um \textit{Device Drive} com duas forma de funcionamento: normal e anormal;
-  \item (  ) O \textit{Device Drive} deve ser gerenciado por lsmdo, insmod, rmmod;
-  \item (  ) O \textit{Device Drive} deve apresentar na tela o que está ocorrendo;
-  \item (  ) Usar processos em ambiente Linux/Linguagem C;
+  \item (OK) O \textit{Device Drive} deve ser gerenciado por lsmdo, insmod, rmmod;
+  \item (OK) O \textit{Device Drive} deve apresentar na tela o que está ocorrendo;
+  \item (OK) Usar processos em ambiente Linux/Linguagem C;
   \item (  ) Executar o programa várias vezes e criar um quadro adequado para apresetar os resultados;
 \end{itemize}
 
 \section{Descrição da Solução}
-%TODO: deve conter algoritmos (partes relevantes) README descrevendo a utilização
+
+A solução proposta consta com a leitura de um device driver para um mouse USB.
 
 \section{Conclusão}
 %TODO: opniões sobre o projetom
