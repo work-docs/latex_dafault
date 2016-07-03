@@ -46,9 +46,24 @@ do kernel. Nesse ponto, o device é detectado mesmo sem haver um \textit{driver}
   \includegraphics[width=0.9\textwidth]{figure/usbgeral.eps}
 \end{figure}
 
+A camada de USB core se comunica com o dispositivo utilizando os \textit{urb} que é descrito com uma estrutura
+(\textit{struct urb}). Os urbs são utilizado para enviar e receber dados de um USB endpoint de um
+dispositivo específico. O ciclo de vida de um urb é basicamente:
+\begin{enumerate}
+  \item Criado por um driver;
+  \item Associado a um endpoint de um dispositivo USB;
+  \item Submetido para o USB code pelo driver;
+  \item Submetido para o USB host controller específico do dispositivo;
+  \item Processado pelo USB host controller que transfere para o dispositivo;
+  \item Quando o urb é completado, o USB host controller notifica o driver.
+\end{enumerate}
+
+Um urb é criado dinamicamente e  pode ser concelado a qualquer momento pelo driver ou pelo USB core
+se o dispositivo for removido do sistema.
+
 Um dispositívo válido de USB tem uma estrutura composta por: \textit{configurations, interface e endpoints}.
 \begin{itemize}
-  \item \textbf{Configurations}: é o perfil do dispositivo;
+  \item \textbf{Configurations}: é o perfil do dispositivo. É usado pelo USB Core para inicializar o dispositivo;
   \item \textbf{Interface}: corresponde a funcionalidade do dispositívo;
   \item \textbf{Endpoint}: são como \textit{pipes} que transferem informações para o dispositívo ou para o computador.
 \end{itemize}
@@ -68,8 +83,10 @@ estrutura.
   \includegraphics[width=0.9\textwidth]{figure/usbdevice.eps}
 \end{figure}
 
-Na seção \ref{utils} será mostrado algumas aplicações que são utilizadas para identificar
+Na seção \ref{utils} será mostrado algumas aplicações e comandos que são utilizados para identificar
 as informações de um dispositivo USB.
+
+
 
 \subsection{Vírus}
 
@@ -150,6 +167,8 @@ a obtenção de informações sobre o dispositivo e o \textit{driver}.
 % insmod
 % rmmod
 % cat /proc/kallsyms
+
+% wireshark
 
 \subsection{Funções da API}
 
