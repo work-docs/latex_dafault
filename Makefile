@@ -1,4 +1,4 @@
-TARGET = PROPOSAL.pdf
+TARGET = LAB.pdf
 
 BIBTEX = bibtex
 LATEX = latex
@@ -13,7 +13,7 @@ STATIC_FILES = $(addprefix $(STATIC_DIR)/, $(STATIC_SOURCES))
 
 BIBLIOGRAPHY_FILE = bibliography.bib
 
-MAIN_FILE = proposal.tex
+MAIN_FILE = lab.tex
 DVI_FILE  = $(addsuffix .dvi, $(basename $(MAIN_FILE)))
 AUX_FILE  = $(addsuffix .aux, $(basename $(MAIN_FILE)))
 PS_FILE   = $(addsuffix .ps, $(basename $(MAIN_FILE)))
