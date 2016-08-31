@@ -1,2 +1,87 @@
 \section{Introdução}
 
+Para o correto funcionamento de equipamentos conectados a redes, algumas
+configurações básicas são necessárias.
+
+\section{Objetivos}
+
+\begin{itemize}
+  \item Compreender as configurações básicas para navegabilidade em uma
+    rede de computadores.
+  \item Exercitar configurações básicas em diferentes sistemas operacionais
+    e entender como usar ferramentas de diagnóstico para validar configurações.
+\end{itemize}
+
+\section{Realização do Laboratório}
+
+\textbf{Montagem de rede interconectada para o experimento}: uma simples rede
+foi criada utilizando um roteador para distribuição da rede com o endereço
+194.86.34.*. Um computador foi utilizado para o experimento com o sistema
+operacional Debian.
+
+\textbf{Configurar os clientes na rede de testes}: o serviço de configuração
+automatida da rede \textbf{network-manager} foi parado para realizar as
+configurações manuais.
+
+Foi incluido as novas configurações de rede \textit{eth0} no arquivo \textbf{/etc/network/interfaces}:
+
+\lstset{style=basic}
+\begin{lstlisting}
+auto eth0
+iface eth0 inet static
+  address 194.86.34.10
+  netmask 255.255.255.0
+  gateway 194.86.34.1
+\end{lstlisting}
+
+A interface de rede é configurada com a chamada do comando \textbf{ifup eth0}.
+Utiliza-se deste arquivo para realizar a configuração permanente no sistema,
+ou seja, quando a máquina é reiniciada essas configurações não serão perdidas.
+As configurações de rede também podem ser feitas diretamente em pelo comando
+\textbf{ifconfig <INTERFACE> <IP> netmask <NETMASK>} e pelo comando
+\textbf{route add default gw <GATEWAY-IP>}.
+
+\textbf{Validando as configurações}: utilizando o comando \textbf{ping}, foi possível realizar
+a verificação da conexão com os computadores da rede, no caso foi realizado
+o ping no próprio roteador. Outro validação foi realizar o ping com algum
+computador fora da rede, no caso foi feito um ping no servidor 8.8.8.8 que é
+o servidor DNS da Google.
+
+\section{Questões para Estudo}
+
+\begin{enumerate}
+  \item \textbf{Há alguma forma mais simples de se realizar a configuração dos
+  equipamentos para que sejam devidamente conectados à rede?}
+
+  As aplicações já presentes nos sistemas operacionais podem ser utilizadas
+  para realizar a configuração automática das interfaces de rede. Sendo assim
+  o ip, gateway, netmask são adquirido por serviço DHCP, bem como a identificação
+  dos servidores DNS de resolução de nomes.
+
+  \item \textbf{Qual é a lista mínima de informações necessárias para que
+  determinado equipamento fique plenamente operacional em uma rede?}
+
+  As principais configurações necessárias para que dois computadores se
+  comuniquem dentro de uma rede são: ip, netmask e gateway. O ip é o endereço
+  que identifica um dispositivo na rede. O netmask diz qual é a rede em que
+  o dispositívo está inserido, ou seja, no nosso experimento, a netmask
+  255.255.255.0 diz aos dispositivos que a rede é composta de ips de
+  194.86.34.0 até 194.86.34.254. O gateway é o endereço da saída da
+  rede, ou seja, o roteador usado para se comunicar com outros computadores
+  fora da rede.
+
+  \item \textbf{O que acontece quando alguma das informações necessárias é
+  suprimida? Elabore melhor os cenários.}
+
+  Elaborando cenários onde há a falta de cada informação.
+  Falta de ip: o dispositivo não pode ser identificado dentro
+  da rede interna ou externa, pois o roteador ou switch não sabe de onde ou
+  para onde enviar os pacotes.
+  Falta de netmask: o dispositivo considera que é possível se comunicar com
+  todos os IPs disponíveis, ou seja, a mascara é considerado como 0.0.0.0.
+  Falta de gateway: o dispositivo não consegue se comunicar com os dispositívos
+  fora da rede.
+
+\end{enumerate}
+
+
