@@ -17,36 +17,197 @@ de serviços a usuários.
 \end{itemize}
 
 \section{Realização do Laboratório}
-
 \textbf{Montagem de rede interconectada para o experimento}: foi feito a montagem de uma rede WAN utilizando
 um \textit{router wireless} com máscara 255.255.255.0 e endereços entre 192.168.10.2 à 192.168.10.254.
+\bigbreak
+\textbf{Configurar os clientes na rede de testes e validar as configurações}: os procedimentos realizados no
+laboratório 00 não foram refeitos. Foi utilizado a aplicação de configuração automática - network manager -
+que realiza a configuração de ip, netmask e gateway.
+\bigbreak
+\textbf{Interações com o serviço de resolução de nomes (DNS)}: utilizando a aplicação `nslookup` - query para
+domain name servers - verificou-se os DNS que proveem os domínios: \textbf{google.com, fga.unb.br, unb.br e localhost}.
+\bigbreak
 
-\textbf{Configurar os clientes na rede de testes e validar as configurações}: os procedimentos realidados no
-laboratório 00 fora refeitos nesta etápa deste laboratório.
+Os resultados para cada um dos comandos:
+\lstset{style=basic}
+\begin{lstlisting}
+$ nslookup google.com
+Server:         192.168.10.1
+Address:        192.168.10.1#53
 
-\textbf{Interações com o serviço de resolução de nomes (DNS)}:
+Non-authoritative answer:
+Name:   google.com
+Address: 216.58.222.110
 
-\textbf{Interações com o serviço HTTP}
+$ nslookup fga.unb.br
+Server:         192.168.10.1
+Address:        192.168.10.1#53
 
-\textbf{Interações com o serviço SMTP}
+Non-authoritative answer:
+Name:   fga.unb.br
+Address: 164.41.94.194
 
-\textbf{DESAFIO: Usando os conceitos explorados na aula sobre Camada de Aplicação, use o comando
-telnet para enviar um e-mail a um usuário de determinado servidor de e-mail.}
+$ nslookup unb.br
+Server:         192.168.10.1
+Address:        192.168.10.1#53
+
+Non-authoritative answer:
+Name:   unb.br
+Address: 164.41.101.33
+
+$ nslookup localhost
+Server:         192.168.10.1
+Address:        192.168.10.1#53
+
+Name:   localhost.unb.br
+Address: 127.0.0.1
+\end{lstlisting}
+\bigbreak
+A análise do output do comando temos: o servidor DNS (nome e IP), que é configurado no sistema operacional, no caso
+o server mostrado é o ip do router; o nome e IP do servidor procurado utilizado o domain name.
+Com a utilização de um parametro no comando, foi testado a especificação de um servidor que não é o
+default do sistema operacional. É possível recuperar o servidor de DNS authoritative do host com o comando
+'host -t ns host\_name'.
+\bigbreak
+\lstset{style=basic}
+\begin{lstlisting}
+$ host -t ns unb.br
+unb.br name server dns1.unb.br.
+unb.br name server dns3.unb.br.
+unb.br name server dns2.unb.br.
+unb.br name server dns10.unb.br.
+
+$ nslookup unb.br dns1.unb.br
+Server:         dns1.unb.br
+Address:        164.41.101.3#53
+
+Name:   unb.br
+Address: 164.41.101.33
+
+\end{lstlisting}
+
+\bigbreak
+\textbf{Interações com o serviço HTTP}: foi realizado os testes com 'telnet' para a comunicação
+HTTP com os servidores: unb.br e localhost. O servidor localhost foi instalado um servidor
+local provido pela aplicação Nginx.
+
+Com a utilização do método GET, foi recuperado as páginas requisitadas com a montagem de um
+cabeçario mínimo HTTP especificando apenas o host.
+\bigbreak
+\lstset{style=basic}
+\begin{lstlisting}
+$ telnet www.unb.br http
+Trying 164.41.101.33...
+Connected to www.unb.br.
+Escape character is '^]'.
+GET / HTTP/1.1
+Host: www.unb.br
+
+HTTP/1.1 200 OK
+Date: Thu, 14 Sep 2016 12:19:20 GMT
+Server: Apache
+Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
+P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"
+Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
+Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
+Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
+Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
+Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html
+
+9626
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-BR">
+  <head>
+...
+
+
+$ telnet localhost http
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+GET / HTTP/1.1
+Host:localhost
+Connection:close
+
+HTTP/1.1 200 OK
+Server: nginx/1.6.2
+Date: Thu, 15 Sep 2016 12:31:35 GMT
+Content-Type: text/html
+Content-Length: 867
+Last-Modified: Wed, 14 Sep 2016 23:45:29 GMT
+Connection: close
+ETag: "57d9e119-363"
+Accept-Ranges: bytes
+
+<!DOCTYPE html>
+<html>
+...
+\end{lstlisting}
+
+\textbf{Interações com o serviço SMTP + DESAFIO}: foi feito uma conexão com o servidor de SMTP local
+configurado utilizando a ferramenta Postfix. Seguindo os passo do roteiro e outras pesquisas e exemplos
+na internet, foi feito o envio de uma email para uma conta registrada no domínio @gmail.com.
+
+
+\begin{lstlisting}
+$ telnet localhost smtp
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+220 jessie.raw ESMTP Postfix (Debian/GNU)
+HELO localhost
+250 jessie.raw
+MAIL FROM:<root@localhost.com>
+250 2.1.0 Ok
+RCPT TO:<paulohtfs@gmail.com>
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+From: sender@example.com
+To: recipient@example.com
+Subject: Test message
+
+Hello there!
+.
+250 2.0.0 Ok: queued as 0EDEB204F9
+quit
+221 2.0.0 Bye
+Connection closed by foreign host.
+\end{lstlisting}
 
 \begin{enumerate}
-  \item \textbf{Em relação ao serviço de resolução de nomes, há um parmetro opcional a ser indicado ao
+  \item \textbf{Em relação ao serviço de resolução de nomes, há um parametro opcional a ser indicado ao
     comando nslookup. Em que contexto é conveniente indicar um valor para esse
-  parmetro?}
+    parametro?}
 
-\item \textbf{Qual é o papel do arquivo /etc/hosts no processo de resolução de nomes?}
+    Quando já se sabe o servidor de DNS authoritative que possui o IP do hostname desejado, isso
+    evita a etapa de busca utilizando os DNS Root e DNS TLD diminuindo o tempo de resposta.
+
+  \item \textbf{Qual é o papel do arquivo /etc/hosts no processo de resolução de nomes?}
+
+    O arquivo /etc/hosts faz o mapeamento do hostname e IP. Ele é cosultado antes da resolução de
+    nomes do servidor DNS mais próximo.
 
   \item \textbf{Em relação às interações com o protocolo HTTP, foi possível identificar o cabeçalho de uma
     requisição típica? Em relação às respostas do servidor, identifique os campos típicos da
-  resposta incluindo descrições sobre as linhas de cabeçalho e o campo de payload.}
+    resposta incluindo descrições sobre as linhas de cabeçalho e o campo de payload.}
+
+  Sim, é possível especificar quais os campos e valores do cabeçario de uma requisição que pode conter Host,
+  Connection, etc. Os campos de resposta são: versão, codigo da resposta,
+  menssagem da resposta, server application, data da resposta, tipo de conteúdo, comprimento do conteúdo
+  opção de controle e o payload, ou seja, o conteúdo da página.
 
   \item \textbf{Em vários dos protocolos ora estudados, foi presenciada uma etapa de autorização que
     preparava uma sessão para a recepção de comandos de determinado cliente. O SMTP
     demonstrou-se um protocolo que não demanda uma etapa de autorização. Em que momento
     isso acontece? O fato de essa etapa ser suprimida resulta em algum risco para um serviço de
-  e-mail?}
+    e-mail?}
+
+    Não ocorre a etapa de autorização, contando que tenha um servidor de e-mail. Pode existir os riscos da
+    interceptação da mensagem enviada e ocorrencia de spam, mas não há recuperação de dados que estão
+    presentes no servidor de e-mail.
+
 \end{enumerate}
