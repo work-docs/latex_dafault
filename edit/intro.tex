@@ -4,210 +4,88 @@ Uma vez devidamente configurado, um equipamento que se comunica através de uma 
 computadores como a Internet se faz útil ao interagir com outros equipamentos para o provimento
 de serviços a usuários.
 
+Ao longo dos encontros em que foi discutida a Camada de Rede, foram introduzidos vários
+protocolos que tipicamente dão suporte às aplicações em rede, que, por sua vez, provêem os
+serviços que usamos diariamente.
+
+Discutiu-se o conjunto de protocolos que cooperam no provimento dos serviços típicos de camada
+de rede podem ser separados em duas categorias: protocolos que geram tabelas de encaminhamento,
+os protocolos de roteamento, e os protocolos que utilizam as tabelas de encaminhamento.
+
+Antes de serem introduzidas ferramentas de inspeção de protocolos de diferentes camadas, faz-se
+necessário apresentar ao estudante um conjunto mínimo de ferramentas que permitirão a execução
+de um diagnóstico preciso ao se encarar uma situação de interrupção ou instabilidade de serviço
+típico de camada de rede.
+
 \section{Objetivos}
 
 \begin{itemize}
-  \item Exercitar as configurações básicas para navegabilidade em uma rede de computadores bem como
-    como usar ferramentas de diagnóstico para validar configurações;
-  \item Exercitar uma comunicação típica HTTP por meio de ferramenta de diagnóstico (telnet);
-  \item Exercitar o início de uma comunicação típica SMTP por meio de ferramenta de diagnóstico
-    (telnet);
-  \item Exercitar as configurações de rede, especialmente no que tange ao serviço de resolução de
-    nomes.
+  \item  Exercitar as configurações básicas para navegabilidade em uma rede de computadores bem como
+    como usar ferramentas de diagnóstico para validar configurações
+  \item Exercitar os princípios básicos de uma comunicação em redes TCP/IP, com ênfase nos serviços
+    típicos de camada de rede. Conhecer e manipular ferramentas de diagnóstico (ping,
+    traceroute, netstat e route) para fixação de conceitos de camada de rede.
 \end{itemize}
 
-\section{Realização do Laboratório}
-\textbf{Montagem de rede interconectada para o experimento}: foi feito a montagem de uma rede WAN utilizando
-um \textit{router wireless} com máscara 255.255.255.0 e endereços entre 192.168.10.2 à 192.168.10.254.
-\bigbreak
-\textbf{Configurar os clientes na rede de testes e validar as configurações}: os procedimentos realizados no
-laboratório 00 não foram refeitos. Foi utilizado a aplicação de configuração automática - network manager -
-que realiza a configuração de ip, netmask e gateway.
-\bigbreak
-\textbf{Interações com o serviço de resolução de nomes (DNS)}: utilizando a aplicação `nslookup` - query para
-domain name servers - verificou-se os DNS que proveem os domínios: \textbf{google.com, fga.unb.br, unb.br e localhost}.
-\bigbreak
-
-Os resultados para cada um dos comandos:
-\lstset{style=basic}
-\begin{lstlisting}
-$ nslookup google.com
-Server:         192.168.10.1
-Address:        192.168.10.1#53
-
-Non-authoritative answer:
-Name:   google.com
-Address: 216.58.222.110
-
-$ nslookup fga.unb.br
-Server:         192.168.10.1
-Address:        192.168.10.1#53
-
-Non-authoritative answer:
-Name:   fga.unb.br
-Address: 164.41.94.194
-
-$ nslookup unb.br
-Server:         192.168.10.1
-Address:        192.168.10.1#53
-
-Non-authoritative answer:
-Name:   unb.br
-Address: 164.41.101.33
-
-$ nslookup localhost
-Server:         192.168.10.1
-Address:        192.168.10.1#53
-
-Name:   localhost.unb.br
-Address: 127.0.0.1
-\end{lstlisting}
-\bigbreak
-A análise do output do comando temos: o servidor DNS (nome e IP), que é configurado no sistema operacional, no caso
-o server mostrado é o ip do router; o nome e IP do servidor procurado utilizado o domain name.
-Com a utilização de um parametro no comando, foi testado a especificação de um servidor que não é o
-default do sistema operacional. É possível recuperar o servidor de DNS authoritative do host com o comando
-'host -t ns host\_name'.
-\bigbreak
-\lstset{style=basic}
-\begin{lstlisting}
-$ host -t ns unb.br
-unb.br name server dns1.unb.br.
-unb.br name server dns3.unb.br.
-unb.br name server dns2.unb.br.
-unb.br name server dns10.unb.br.
-
-$ nslookup unb.br dns1.unb.br
-Server:         dns1.unb.br
-Address:        164.41.101.3#53
-
-Name:   unb.br
-Address: 164.41.101.33
-
-\end{lstlisting}
-
-\bigbreak
-\textbf{Interações com o serviço HTTP}: foi realizado os testes com 'telnet' para a comunicação
-HTTP com os servidores: unb.br e localhost. O servidor localhost foi instalado um servidor
-local provido pela aplicação Nginx.
-
-Com a utilização do método GET, foi recuperado as páginas requisitadas com a montagem de um
-cabeçario mínimo HTTP especificando apenas o host.
-\bigbreak
-\lstset{style=basic}
-\begin{lstlisting}
-$ telnet www.unb.br http
-Trying 164.41.101.33...
-Connected to www.unb.br.
-Escape character is '^]'.
-GET / HTTP/1.1
-Host: www.unb.br
-
-HTTP/1.1 200 OK
-Date: Thu, 14 Sep 2016 12:19:20 GMT
-Server: Apache
-Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
-P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"
-Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
-Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
-Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
-Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
-Set-Cookie: CAKEPHP=n9nkcnsqcps8l9811cvli4dgd4; expires=Sun, 15 Sep 2041 18:19:45 GMT; path=/
-Connection: close
-Transfer-Encoding: chunked
-Content-Type: text/html
-
-9626
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-  <html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-BR">
-  <head>
-...
-
-
-$ telnet localhost http
-Trying ::1...
-Connected to localhost.
-Escape character is '^]'.
-GET / HTTP/1.1
-Host:localhost
-Connection:close
-
-HTTP/1.1 200 OK
-Server: nginx/1.6.2
-Date: Thu, 15 Sep 2016 12:31:35 GMT
-Content-Type: text/html
-Content-Length: 867
-Last-Modified: Wed, 14 Sep 2016 23:45:29 GMT
-Connection: close
-ETag: "57d9e119-363"
-Accept-Ranges: bytes
-
-<!DOCTYPE html>
-<html>
-...
-\end{lstlisting}
-
-\textbf{Interações com o serviço SMTP + DESAFIO}: foi feito uma conexão com o servidor de SMTP local
-configurado utilizando a ferramenta Postfix. Seguindo os passo do roteiro e outras pesquisas e exemplos
-na internet, foi feito o envio de uma email para uma conta registrada no domínio @gmail.com.
-
-
-\begin{lstlisting}
-$ telnet localhost smtp
-Trying ::1...
-Connected to localhost.
-Escape character is '^]'.
-220 jessie.raw ESMTP Postfix (Debian/GNU)
-HELO localhost
-250 jessie.raw
-MAIL FROM:<root@localhost.com>
-250 2.1.0 Ok
-RCPT TO:<paulohtfs@gmail.com>
-250 2.1.5 Ok
-DATA
-354 End data with <CR><LF>.<CR><LF>
-From: sender@example.com
-To: recipient@example.com
-Subject: Test message
-
-Hello there!
-.
-250 2.0.0 Ok: queued as 0EDEB204F9
-quit
-221 2.0.0 Bye
-Connection closed by foreign host.
-\end{lstlisting}
+\section{Questões para Estudo}
 
 \begin{enumerate}
-  \item \textbf{Em relação ao serviço de resolução de nomes, há um parametro opcional a ser indicado ao
-    comando nslookup. Em que contexto é conveniente indicar um valor para esse
-    parametro?}
+  \item \textbf{A porta de um servidor que provê aplicações sobre TCP pode se encontrar em diferentes
+    estados. Quais são esses estados e como evolui a comunicação entre um cliente e um
+  servidor TCP quando a porta se apresenta em cada um dos estados possíveis?}
 
-    Quando já se sabe o servidor de DNS authoritative que possui o IP do hostname desejado, isso
-    evita a etapa de busca utilizando os DNS Root e DNS TLD diminuindo o tempo de resposta.
+  Quando uma porta é aberta manualmente, ela fica no estado LISTEN, esperando conexoes.
+  Quando um socket precisa de uma conexao, ele manda a flag SYN e fica com o estado
+  SYN\_SENT (este estado nao foi percebido pela dupla, supoe-se que por causa da velocidade da
+  conexao). O socket receptor fica no estado de LISTEN aguardando a conexão do cliente.
+  O proximo estado sera ESTABLISHED, se o socket receptor aceitou a conexao.
+  O estado FIN\_WAIT1 indica que o client deseja finalizar a conexão. O próximo estado é o 
+  TIME\_WAIT indica a espera do ACK do servidor. O servidor, quando recebe o FIN, ele entra em
+  estado de CLOSE\_WAIT e responde com o ACK. O cliente recebe esse ACK e entra em estado de
+  FIN\_WAIT2. O servidor então manda seu FIN e entra em estado de LAST\_ACK. Assim que o servidor
+  recebe o ACK do cliente ele entra em estado CLOSE fechando a conexão.
 
-  \item \textbf{Qual é o papel do arquivo /etc/hosts no processo de resolução de nomes?}
+  \item \textbf{Que tipo de informações o arquivo /etc/services provê?}
 
-    O arquivo /etc/hosts faz o mapeamento do hostname e IP. Ele é cosultado antes da resolução de
-    nomes do servidor DNS mais próximo.
+  Mapeamento de serviço de internet para as portas e protocolos. Mesmo que o serviço não utiliza
+  protocolo UDP ele é mapeado para os dois protocolos TCP e UDP.
 
-  \item \textbf{Em relação às interações com o protocolo HTTP, foi possível identificar o cabeçalho de uma
-    requisição típica? Em relação às respostas do servidor, identifique os campos típicos da
-    resposta incluindo descrições sobre as linhas de cabeçalho e o campo de payload.}
+  \item \textbf{Que tipo de ferramentas você recomendaria para a repetição dos mesmos procedimentos
+    sobre UDP?}
 
-  Sim, é possível especificar quais os campos e valores do cabeçario de uma requisição que pode conter Host,
-  Connection, etc. Os campos de resposta são: versão, codigo da resposta,
-  menssagem da resposta, server application, data da resposta, tipo de conteúdo, comprimento do conteúdo
-  opção de controle e o payload, ou seja, o conteúdo da página.
+  Utilizando as mesmas ferramentas, mas com a utilização de flags específicas para operações com o UDP
 
-  \item \textbf{Em vários dos protocolos ora estudados, foi presenciada uma etapa de autorização que
-    preparava uma sessão para a recepção de comandos de determinado cliente. O SMTP
-    demonstrou-se um protocolo que não demanda uma etapa de autorização. Em que momento
-    isso acontece? O fato de essa etapa ser suprimida resulta em algum risco para um serviço de
-    e-mail?}
+  \item \textbf{Em relação à Etapa 4 do presente roteiro, descreva o que se observou durante as interações
+    com o socket servidor.}
 
-    Não ocorre a etapa de autorização, contando que tenha um servidor de e-mail. Pode existir os riscos da
-    interceptação da mensagem enviada e ocorrencia de spam, mas não há recuperação de dados que estão
-    presentes no servidor de e-mail.
+  Observou-se que a mensagem enviada pelo telnet aparecia na tela do servidor nc e o inverso também
+  era válido. Quando a conexão era encerrada tanto no telnet quanto no nc, a conexão era encerradas e as
+  portas fechadas.
 
+  \item \textbf{Como você implementaria um transmissor básico de arquivos usando apenas as ferramentas
+    executadas nesse experimento?}
+
+  Considerando uma transferencia de arquivo text ASCII o procedimento seria feito com redirecionameto
+  de arquivos. Exemplo:
+
+  \lstset{style=basic}
+  \begin{lstlisting}
+  # Servidor
+  nc -l 8080 > output.txt
+
+  # Cliente
+  telnet localhost 8080 < input.txt
+
+  \end{lstlisting}
+  \item \textbf{O nmap é considerado uma ferramenta extremamente poderosa. Como você a utilizaria para
+    identificar quais são os equipamentos que estão ativos e em execução em uma rede?}
+
+  Utilizando o nmap com a flag -sn que não escaneia as portas. Exemplo:
+
+  \lstset{style=basic}
+  \begin{lstlisting}
+  nmap -sn 192.168.0.20/24
+  \end{lstlisting}
+  
+  A notação /24 significa que a rede será escaneada entre 192.168.0.0-254 ips.
 \end{enumerate}
