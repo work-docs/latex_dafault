@@ -20,8 +20,8 @@ típico de camada de rede.
 \section{Objetivos}
 
 \begin{itemize}
-  \item  Exercitar as configurações básicas para navegabilidade em uma rede de computadores bem como
-    como usar ferramentas de diagnóstico para validar configurações
+  \item Exercitar as configurações básicas para navegabilidade em uma rede de computadores bem como
+    como usar ferramentas de diagnóstico para validar configurações;
   \item Exercitar os princípios básicos de uma comunicação em redes TCP/IP, com ênfase nos serviços
     típicos de camada de rede. Conhecer e manipular ferramentas de diagnóstico (ping,
     traceroute, netstat e route) para fixação de conceitos de camada de rede.
@@ -30,62 +30,31 @@ típico de camada de rede.
 \section{Questões para Estudo}
 
 \begin{enumerate}
-  \item \textbf{A porta de um servidor que provê aplicações sobre TCP pode se encontrar em diferentes
-    estados. Quais são esses estados e como evolui a comunicação entre um cliente e um
-  servidor TCP quando a porta se apresenta em cada um dos estados possíveis?}
+  \item \textbf{A descrição de informações específicas sobre a interface de rede obtida através da execução
+    do comando ifconfig é bem extensa. Partindo do resultado da execução do comando em seu
+    equipamento e tomando como referência a interface que foi usada nos testes, descreva em
+    detalhes o significado de cada um dos itens discriminados na segunda coluna de saída do
+    comando.}
 
-  Quando uma porta é aberta manualmente, ela fica no estado LISTEN, esperando conexoes.
-  Quando um socket precisa de uma conexao, ele manda a flag SYN e fica com o estado
-  SYN\_SENT (este estado nao foi percebido pela dupla, supoe-se que por causa da velocidade da
-  conexao). O socket receptor fica no estado de LISTEN aguardando a conexão do cliente.
-  O proximo estado sera ESTABLISHED, se o socket receptor aceitou a conexao.
-  O estado FIN\_WAIT1 indica que o client deseja finalizar a conexão. O próximo estado é o 
-  TIME\_WAIT indica a espera do ACK do servidor. O servidor, quando recebe o FIN, ele entra em
-  estado de CLOSE\_WAIT e responde com o ACK. O cliente recebe esse ACK e entra em estado de
-  FIN\_WAIT2. O servidor então manda seu FIN e entra em estado de LAST\_ACK. Assim que o servidor
-  recebe o ACK do cliente ele entra em estado CLOSE fechando a conexão.
+  \item \textbf{Equipamentos que implementam a pilha de protocolos TCP/IP apresentam, tipicamente, uma
+    saída padrão durante a execução do comando ifconfig. Indique que saída é essa e como ela
+    se faz útil na construção de sistemas que funcionarão sobre redes de comunicações.}
 
-  \item \textbf{Que tipo de informações o arquivo /etc/services provê?}
+  \item \textbf{A execução do comando ping em uma rede é uma das primeiras medidas para verificação de
+    continuidade de serviço. Embora seja um comando muito simples de invocar e cujos
+    resultados práticos são muito fáceis de interpretar, a riqueza de detalhes da saída típica de
+    execução do ping é grande. Descreva cada um dos itens que compõem a saída de execução
+    típica de um comando ping.}
 
-  Mapeamento de serviço de internet para as portas e protocolos. Mesmo que o serviço não utiliza
-  protocolo UDP ele é mapeado para os dois protocolos TCP e UDP.
+  \item \textbf{Em relação à Etapa 5 do presente roteiro, descreva cada um dos itens que compõem a saída
+    de execução típica de um comando netstat -nr. Qual seria a sintaxe usada para extrair a
+    mesma informação, porém a partir do comando ip?}
 
-  \item \textbf{Que tipo de ferramentas você recomendaria para a repetição dos mesmos procedimentos
-    sobre UDP?}
+  \item \textbf{Em relação à Etapa 5 do presente roteiro, descreva cada um dos itens que compõem a saída
+    de execução típica de um comando netstat -nr. Qual seria a sintaxe usada para extrair a
+    mesma informação, porém a partir do comando ip?}
 
-  Utilizando as mesmas ferramentas, mas com a utilização de flags específicas para operações com o UDP
+  \item \textbf{Em relação à Etapa 6 do presente roteiro, descreva o processo típico de detecção da rota
+    percorrida por um pacote através da execução do comando traceroute}
 
-  \item \textbf{Em relação à Etapa 4 do presente roteiro, descreva o que se observou durante as interações
-    com o socket servidor.}
-
-  Observou-se que a mensagem enviada pelo telnet aparecia na tela do servidor nc e o inverso também
-  era válido. Quando a conexão era encerrada tanto no telnet quanto no nc, a conexão era encerradas e as
-  portas fechadas.
-
-  \item \textbf{Como você implementaria um transmissor básico de arquivos usando apenas as ferramentas
-    executadas nesse experimento?}
-
-  Considerando uma transferencia de arquivo text ASCII o procedimento seria feito com redirecionameto
-  de arquivos. Exemplo:
-
-  \lstset{style=basic}
-  \begin{lstlisting}
-  # Servidor
-  nc -l 8080 > output.txt
-
-  # Cliente
-  telnet localhost 8080 < input.txt
-
-  \end{lstlisting}
-  \item \textbf{O nmap é considerado uma ferramenta extremamente poderosa. Como você a utilizaria para
-    identificar quais são os equipamentos que estão ativos e em execução em uma rede?}
-
-  Utilizando o nmap com a flag -sn que não escaneia as portas. Exemplo:
-
-  \lstset{style=basic}
-  \begin{lstlisting}
-  nmap -sn 192.168.0.20/24
-  \end{lstlisting}
-  
-  A notação /24 significa que a rede será escaneada entre 192.168.0.0-254 ips.
 \end{enumerate}
