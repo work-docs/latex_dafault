@@ -35,20 +35,24 @@ típico de camada de rede.
     equipamento e tomando como referência a interface que foi usada nos testes, descreva em
     detalhes o significado de cada um dos itens discriminados na segunda coluna de saída do
     comando.}
+    Inet é o endereço de IP da máquina que rodou o comando. Netmask é a máscara de rede que indica, no IP, quantos bits são destinados à localização da rede. Broadcast é o endereço de IP que faz o broadcast (transmissão) de pacotes na rede (todos os dispositivos ligados à rede receberão o pacote, mas não precisam responder).
 
   \item \textbf{Equipamentos que implementam a pilha de protocolos TCP/IP apresentam, tipicamente, uma
     saída padrão durante a execução do comando ifconfig. Indique que saída é essa e como ela
     se faz útil na construção de sistemas que funcionarão sobre redes de comunicações.}
+    Saida 0.0.0.0 e indica que, dentro da rede, se o nó não possui um enderaçamento para o pacote que está sendo encaminhado, ele deve ir para este endereço padrão.
 
   \item \textbf{A execução do comando ping em uma rede é uma das primeiras medidas para verificação de
     continuidade de serviço. Embora seja um comando muito simples de invocar e cujos
     resultados práticos são muito fáceis de interpretar, a riqueza de detalhes da saída típica de
     execução do ping é grande. Descreva cada um dos itens que compõem a saída de execução
     típica de um comando ping.}
-
-  \item \textbf{Em relação à Etapa 5 do presente roteiro, descreva cada um dos itens que compõem a saída
-    de execução típica de um comando netstat -nr. Qual seria a sintaxe usada para extrair a
-    mesma informação, porém a partir do comando ip?}
+    Primeira Linha:
+        Nome do comando - endereço (pode ser uma url ou IP) - IP da máquina de destino - Payload e tamanho total do datagrama IP entre parenteses.
+    Segunda Linha:
+        Primeira parte é o tamanho do pacote ICMP com os cabeçalhos (64 bytes). Segunda parte é o endereço que está 'sendo pingado' (192.168.0.1, neste caso). Icmp_seq é o número de sequência do pacote, serve apara identificar o pacote (dentro da mesma série de pings). TTL é o número de hops permitidos antes do pacote ser descartado (este número é atualizado cada vez que o pacote muda de roteador). Time é o tempo levado para receber a resposta do ping.
+     
+     Ao encerrar o comando, estatísticas são mostradas com informações como: Número de pacotes transmitidos, quantidade recebida, porcentagem de perda e tempo total. Máximo, mínimo, média e desvio padrão do RTT (tempo de 'ida-e-volta' do pacote)
 
   \item \textbf{Em relação à Etapa 5 do presente roteiro, descreva cada um dos itens que compõem a saída
     de execução típica de um comando netstat -nr. Qual seria a sintaxe usada para extrair a
