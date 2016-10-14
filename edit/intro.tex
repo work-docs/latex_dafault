@@ -1,120 +1,43 @@
 \section{Introdução}
-
 Uma vez devidamente configurado, um equipamento que se comunica através de uma rede de
 computadores como a Internet se faz útil ao interagir com outros equipamentos para o provimento
 de serviços a usuários.
 
-Ao longo dos encontros em que foi discutida a Camada de Rede, foram introduzidos vários
-protocolos que tipicamente dão suporte às aplicações em rede, que, por sua vez, provêem os
-serviços que usamos diariamente.
+Ao longo dos encontros, foi possível obter uma visão geral de como funcionam redes de comutação
+de pacotes sobre os protocolos TCP/IP. Discutiu-se o conjunto de protocolos que cooperam no
+provimento dos serviços típicos de camada básica componente da arquitetura de redes TCP/IP:
+iniciamos o estudo de protocolos de camada de aplicação, seguindo para a camada de transporte,
+depois camada rede e, por fim, camadas de enlace e física.
 
-Discutiu-se o conjunto de protocolos que cooperam no provimento dos serviços típicos de camada
-de rede podem ser separados em duas categorias: protocolos que geram tabelas de encaminhamento,
-os protocolos de roteamento, e os protocolos que utilizam as tabelas de encaminhamento.
-
-Antes de serem introduzidas ferramentas de inspeção de protocolos de diferentes camadas, faz-se
-necessário apresentar ao estudante um conjunto mínimo de ferramentas que permitirão a execução
-de um diagnóstico preciso ao se encarar uma situação de interrupção ou instabilidade de serviço
-típico de camada de rede.
+Agora que os estudantes já tem um conceito consolidado da arquitetura típica das redes TCP/IP,
+convém apresentarmos as ferramentas mais especializadas para a depuração de problemas
+enfrentados seja na sustentação de uma infraestrutura de redes de computadores, seja na sustentação
+de aplicações distribuídas.
 
 \section{Objetivos}
 
 \begin{itemize}
   \item Exercitar as configurações básicas para navegabilidade em uma rede de computadores bem como
-    como usar ferramentas de diagnóstico para validar configurações;
-  \item Exercitar os princípios básicos de uma comunicação em redes TCP/IP, com ênfase nos serviços
-    típicos de camada de rede. Conhecer e manipular ferramentas de diagnóstico (ping,
-    traceroute, netstat e route) para fixação de conceitos de camada de rede.
+    como usar ferramentas de diagnóstico para validar configurações
+  \item Exercitar os princípios básicos de uma comunicação em redes TCP/IP, nesse momento com
+    ênfase na visão integral da interação entre os protocolos de várias camadas que são coordenados
+    para a sustentação de uma aplicação distribuída ou mesmo no provimento de uma infraestrutura
+    típica de redes de computadores.
+  \item Conhecer e manipular ferramentas de diagnóstico (ping, traceroute, netstat,
+    tcpdump e wireshark) para fixação de conceitos de fundamentos de redes de
+    computadores.
+  \item Identificar os campos típicos dos pacotes de vários protocolos que interagem no provimento de
+    aplicação distribuída
 \end{itemize}
 
 \section{Questões para Estudo}
 
 \begin{enumerate}
-  \item \textbf{A descrição de informações específicas sobre a interface de rede obtida através da execução
-    do comando ifconfig é bem extensa. Partindo do resultado da execução do comando em seu
-    equipamento e tomando como referência a interface que foi usada nos testes, descreva em
-    detalhes o significado de cada um dos itens discriminados na segunda coluna de saída do
-    comando.}
-    Inet é o endereço de IP da máquina que rodou o comando. Netmask é a máscara de rede que indica, no IP, quantos bits são destinados à localização da rede. Broadcast é o endereço de IP que faz o broadcast (transmissão) de pacotes na rede (todos os dispositivos ligados à rede receberão o pacote, mas não precisam responder).
+  \item \textbf{Realize a captura de uma sessão HTTP de busca por uma página da Internet. Partindo da
+    captura, descreva detalhadamente as etapas envolvidas na requisição de um objeto
+    index.html de uma página provida sobre o protocolo HTTP, explicando criteriosamente o
+    conteúdo das mensagens. Não se esqueça de dizer a qual das camadas pertencem os
+    protocolos envolvidos.}
 
-  \item \textbf{Equipamentos que implementam a pilha de protocolos TCP/IP apresentam, tipicamente, uma
-    saída padrão durante a execução do comando ifconfig. Indique que saída é essa e como ela
-    se faz útil na construção de sistemas que funcionarão sobre redes de comunicações.}
-    Saida 0.0.0.0 e indica que, dentro da rede, se o nó não possui um enderaçamento para o pacote que está sendo encaminhado, ele deve ir para este endereço padrão.
-
-  \item \textbf{A execução do comando ping em uma rede é uma das primeiras medidas para verificação de
-    continuidade de serviço. Embora seja um comando muito simples de invocar e cujos
-    resultados práticos são muito fáceis de interpretar, a riqueza de detalhes da saída típica de
-    execução do ping é grande. Descreva cada um dos itens que compõem a saída de execução
-    típica de um comando ping.}
-    Primeira Linha:
-        Nome do comando - endereço (pode ser uma url ou IP) - IP da máquina de destino - Payload e tamanho total do datagrama IP entre parenteses.
-    Segunda Linha:
-        Primeira parte é o tamanho do pacote ICMP com os cabeçalhos (64 bytes). Segunda parte é o endereço que está 'sendo pingado' (192.168.0.1, neste caso). Icmp\_seq é o número de sequência do pacote, serve apara identificar o pacote (dentro da mesma série de pings). TTL é o número de hops permitidos antes do pacote ser descartado (este número é atualizado cada vez que o pacote muda de roteador). Time é o tempo levado para receber a resposta do ping.
-     
-     Ao encerrar o comando, estatísticas são mostradas com informações como: Número de pacotes transmitidos, quantidade recebida, porcentagem de perda e tempo total. Máximo, mínimo, média e desvio padrão do RTT (tempo de 'ida-e-volta' do pacote)
-
-  \item \textbf{Em relação à Etapa 5 do presente roteiro, descreva cada um dos itens que compõem a saída
-    de execução típica de um comando netstat -nr. Qual seria a sintaxe usada para extrair a
-    mesma informação, porém a partir do comando ip?}
-\newpage
-  O commando ntstat -nr produz a saída com as informações como demonstra o código abaixo.
   
-  \lstset{style=basic}
-  \begin{lstlisting}
-  $ netstat -nr
-    Kernel IP routing table
-    Destination    Gateway       Genmask        Flags  MSS Window  irtt Iface
-    0.0.0.0        192.168.10.1  0.0.0.0        UG       0 0          0 wlan0
-    10.10.10.0     0.0.0.0       255.255.255.0  U        0 0          0 vboxnet0
-    169.254.0.0    0.0.0.0       255.255.0.0    U        0 0          0 wlan0
-    172.17.0.0     0.0.0.0       255.255.0.0    U        0 0          0 docker0
-    192.168.10.0   0.0.0.0       255.255.255.0  U        0 0          0 wlan0
-    192.168.122.0  0.0.0.0       255.255.255.0  U        0 0          0 virbr0
-  \end{lstlisting}
-
-  Com a ferramenta ip, também é possível obter a informações sobre as rotas. A opção route (ip route)
-  é usada pra o resultado mostrado do código abaixo.
-
-  \lstset{style=basic}
-  \begin{lstlisting}
-  $ ip route
-    default via 192.168.10.1 dev wlan0  proto static  metric 1024 
-    10.10.10.0/24 dev vboxnet0  proto kernel  scope link  src 10.10.10.1 
-    169.254.0.0/16 dev wlan0  scope link  metric 1000 
-    172.17.0.0/16 dev docker0  proto kernel  scope link  src 172.17.42.1 
-    192.168.10.0/24 dev wlan0  proto kernel  scope link  src 192.168.10.154 
-    192.168.122.0/24 dev virbr0  proto kernel  scope link  src 192.168.122.1 
-  \end{lstlisting}
-
-  \item \textbf{Em relação à Etapa 6 do presente roteiro, descreva o processo típico de detecção da rota
-    percorrida por um pacote através da execução do comando traceroute}
-
-    A ferramenta tracerouter utiliza as informações do TTL para identificar a quantidade de hops
-    na rede até alcançar o destino. O TTL é um contador que delimita a quantidade de hops (roteadores)
-    em que o pacote poderá passar para chegar ao destino. Sem ele, o pacote poderia ficar infinitamente
-    procurando o destino pela rede.
-
-    Quanto um roteador recebe o pacote, ele diminui o TTL em 1. Exemplo: se um pacote saíu do emissor
-    com 30 TTL, o roteador seguinte que o recebe diminui em um ficando com 29 TTL. Quanto o roteador
-    recebe o TTL igual a 1, o pacote é descartado e é enviado uma mensagem ao emissor para informar que
-    o valor do TTL foi expirado.
-
-    Conhecendo esse funcionamento do TTL, o tracerouter realiza o procedimento de enviar pacotes com quantidades
-    delimitadas de TTL para identificar cada hop da rede até a chegada ao destino seguindo a seguintes etapas.
-    \begin{enumerate}
-      \item O tracerouter envia um pacote ICMP com o TTL igual a 1 para o seu destino;
-      \item Como o TTL é igual a um, o primeiro roteador que ele atingir irá verificar o valor e irá fazer o
-        descarte do pacote e avisar ao emissor sobre o descarte. Nisso o tracerouter identifica quem é o primeiro
-        hop da rede;
-      \item Em seguida, o tracerouter envia um pacote com 1 TTL a mais, ou seja, TTL igual a 2;
-      \item Agora o pacote irá passar pelo primeiro roteador que reduzirá o TTL para 1 e enviar para o próximo.
-        Assim que alcançar o próximo roteador o pacote será descartado e enviará um aviso ao emissor. Assim é identificado
-        o segundo hop;
-      \item O TTL dessa vez é incrementado para 3 para identificar o terceiro hop e assim sucessivamente.
-    \end{enumerate}
-
-    O traceroute, por default utiliza o máximo de hops 30, mas é possível configura-lo para realizar mais hops na rede.
-
-
 \end{enumerate}
