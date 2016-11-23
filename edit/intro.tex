@@ -1,43 +1,42 @@
 \section{Introdução}
-Uma vez devidamente configurado, um equipamento que se comunica através de uma rede de
-computadores como a Internet se faz útil ao interagir com outros equipamentos para o provimento
-de serviços a usuários.
 
-Ao longo dos encontros, foi possível obter uma visão geral de como funcionam redes de comutação
-de pacotes sobre os protocolos TCP/IP. Discutiu-se o conjunto de protocolos que cooperam no
-provimento dos serviços típicos de camada básica componente da arquitetura de redes TCP/IP:
-iniciamos o estudo de protocolos de camada de aplicação, seguindo para a camada de transporte,
-depois camada rede e, por fim, camadas de enlace e física.
+Este trabalho foi desenvolvindo para implementar um servidor RADIUS em conjunto com uma
+base de dados LDAP para prover um serviço de autenticação de usuário a uma rede.
+As seções seguintes abordam a definição do problema, ou seja, a motivação da implementação
+de um servidor RADIUS e LDAP, a solução encontrada para a implementação do protocolo, o
+desenvolvimento feito até a finalização do trabalho, dificuldades encontradas durante o
+desenvolvimento e os resultados encontrados.
 
-Agora que os estudantes já tem um conceito consolidado da arquitetura típica das redes TCP/IP,
-convém apresentarmos as ferramentas mais especializadas para a depuração de problemas
-enfrentados seja na sustentação de uma infraestrutura de redes de computadores, seja na sustentação
-de aplicações distribuídas.
 
-\section{Objetivos}
+\section{O Problema}
 
-\begin{itemize}
-  \item Exercitar as configurações básicas para navegabilidade em uma rede de computadores bem como
-    como usar ferramentas de diagnóstico para validar configurações
-  \item Exercitar os princípios básicos de uma comunicação em redes TCP/IP, nesse momento com
-    ênfase na visão integral da interação entre os protocolos de várias camadas que são coordenados
-    para a sustentação de uma aplicação distribuída ou mesmo no provimento de uma infraestrutura
-    típica de redes de computadores.
-  \item Conhecer e manipular ferramentas de diagnóstico (ping, traceroute, netstat,
-    tcpdump e wireshark) para fixação de conceitos de fundamentos de redes de
-    computadores.
-  \item Identificar os campos típicos dos pacotes de vários protocolos que interagem no provimento de
-    aplicação distribuída
-\end{itemize}
+\subsection{Radius}
 
-\section{Questões para Estudo}
+O protocolo Remote Authentication Dial-in User Service (RADIUS) foi desenvolvido pela
+Livingston Enterprises Inc. como um servidor de acesso e autenticação. RADIUS é um
+protocolo cliente/servidor. O cliente é tipicamente um Network Access Server (NAS) que
+pode ser um roteador ou outro servidor de acesso e o servidor é um processo daemon que
+pode ser instalado em um sistema UNIX ou Windows NT.
 
-\begin{enumerate}
-  \item \textbf{Realize a captura de uma sessão HTTP de busca por uma página da Internet. Partindo da
-    captura, descreva detalhadamente as etapas envolvidas na requisição de um objeto
-    index.html de uma página provida sobre o protocolo HTTP, explicando criteriosamente o
-    conteúdo das mensagens. Não se esqueça de dizer a qual das camadas pertencem os
-    protocolos envolvidos.}
+O cliente é responsável por passar as informações do usuário ao servidor RADIUS e tomar
+uma ação de acordo com a resposta, que pode ser de permissão ou bloqueio do acesso à rede.
+O servidor é responsável por receber as informações do usuário que requisita o acesso,
+autentica o usuário, e retorna as informações necessárias para o cliente devolver ao usuário.
 
-  
-\end{enumerate}
+\subsubsection{Segurança}
+
+(descobrir como a transmissão dos dados é feita, ou seja, a encriptação dos dados entre
+server e client)
+O servidor e cliente RADIUS se autenticam por meio de uma chave secreta que nunca é
+transmitida pela rede. Além disso, qualquer senha de usuário são encriptadas antes de
+serem enviadas do cliente ao servidor, eliminando a possibilidade de roubo de informações
+com snoops de rede.
+
+\subsection{LDAP}
+
+\section{Solução e Desenvolvimento}
+
+\section{Dificuldades}
+
+\section{Resultados}
+
