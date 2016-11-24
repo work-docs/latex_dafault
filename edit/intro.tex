@@ -77,14 +77,31 @@ quantidade de dados enviada ou recebida durante uma sessão" \cite{radius-guide}
 
 As informações armazenados neste processo não incluem informações detalhadas sobre o tráfego
 de dados da rede, como por exemplo quantidade de bytes transferida numa requisição HTTP \cite{radius-guide}
-% \subsection{Segurança}
 
-% (descobrir como a transmissão dos dados é feita, ou seja, a encriptação dos dados entre
-% server e client)
-% O servidor e cliente RADIUS se autenticam por meio de uma chave secreta que nunca é
-% transmitida pela rede. Além disso, qualquer senha de usuário são encriptadas antes de
-% serem enviadas do cliente ao servidor, eliminando a possibilidade de roubo de informações
-% com snoops de rede.
+\subsection{Processo da Sessão Radius}
+
+O processo da sessão radius consiste em vários passos \cite{radius-guide}, descritos a seguir:
+\begin{itemize}
+    \item Um usuário entra em contato com o cliente Radius (NAS, geralmente) para
+    acessar a rede;
+    \item O NAS entra em contato com o servidor Radius, usando o mecanismo \textit{shared secret},
+    na porta certa para o serviço;
+    \item O NAS manda um \textit{Access-Request} ao servidor, com as credenciais
+    do usuário;
+        \subitem A mensagem é mandada utilizando um dos protocolos de segurança:
+        EAP \textit{(Extensible Authentication Protocol)},
+        CHAP \textit{(Challenge-Handshake Authentication Protocol)} ou
+        PAP \textit{(Password Authentication Protocol)}
+    \item O servidor Radius autentica o usuário;
+    \item O servidor Radius manda o resultado de volta para o NAS. Se o usuário foi
+    corretamente autenticado, o NAS receberá um \textit{Access Accept} e as políticas
+    de uso para aquele usuário. Se o usuário foi rejeitado, um \textit{Access Reject}
+    será enviado, e o usuário não terá acesso à rede.
+\end{itemize}
+
+É importante ressaltar que o servidor Radius, apesar de conter as informações e políticas
+do usuário NÃO é o responsável por aplicá-las. Na verdade, toda a comunicação se dá por
+iniciativa do cliente e o cliente é quem deve fazer cumprir todas as políticas para aquele usuário.
 
 \section{LDAP}
 
