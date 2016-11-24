@@ -3,8 +3,8 @@
 Este trabalho foi desenvolvindo para implementar um servidor RADIUS em conjunto com uma
 base de dados LDAP para prover um serviço de autenticação de usuário a uma rede.
 As seções seguintes abordam a definição do problema, ou seja, a motivação da implementação
-de um servidor RADIUS e LDAP, a solução encontrada para a implementação do protocolo, o
 desenvolvimento feito até a finalização do trabalho, dificuldades encontradas durante o
+de um servidor RADIUS e LDAP, a solução encontrada para a implementação do protocolo, o
 desenvolvimento e os resultados encontrados.
 
 Como foi visto em sala de aula, apesar de uma encriptação de chave compartilhada
@@ -38,7 +38,7 @@ problemas citados anteriormente.
 
 \section{Radius}
 
-O protocolo Remote Authentication Dial-in User Service (RADIUS) foi desenvolvido pela
+O protocolo \textit{Remote Authentication Dial-in User Service} (RADIUS) foi desenvolvido pela
 Livingston Enterprises Inc. como um servidor de acesso e autenticação. RADIUS é um
 protocolo cliente/servidor \cite{radius-guide}.
 
@@ -105,25 +105,48 @@ iniciativa do cliente e o cliente é quem deve fazer cumprir todas as políticas
 
 \section{LDAP}
 
-O protocolo Lightweight Directory Access Protocol (LDAP) foi desenvolvido especificamente
-para simples leituras/escritas para o X.500 Directory, e é um complemento pra o Directory
-Access Protocol (DAP). O X.500 Directory é uma série de padrões de rede que aborda serviço
-de diretório. O LDAP utiliza-se do TCP para o transporte de diretórios pela rede e os dados
-são codificados como strings (Distinguished Names).
+O \textit{Lightweight Directory Access Protocol} (LDAP) é um protocolo para acessar
+serviços de diretório, que são banco de dados (não relacionais) "especialmente
+projetados para pesquisa e navegação, com suporte básico à funções de consulta e
+atualização" (tradução livre) \cite{openldap}
 
-O modelo da X.500 de 1993 é implementado no LDAP e consiste em:
-\begin{itemize}
-  \item Uma entrada contem vários atributos;
-  \item Um atributo tem um nome e um ou mais valores. Os atributos são definidos nos schemas;
-  \item Cada entrada tem um identificador único: Distinguished Name (DN). Consiste de um
-    Relative Distinguished Name (RDN), construído de alguns atributos seguidos do DN pai.
-    O DN pode ser comparado com um caminho de um arquivo e o RDN o nome relativo do arquivo.
-    (temos /foo/bar/file.txt como DN e file.txt como RDN).
-\end{itemize}
+O LDAP serve para diversos usos, como autenticação de máquina, autenticação de usuários,
+representação organizacional, lista de endereços, entre vários outros. Ele utiliza
+um modelo cliente/servidor, onde o servidor contém a informação desejada. O cliente
+pergunta onde está aquela informação e o servidor responde com um ponteiro para ela.\cite{openldap}
+
+A informação é armazenada em formato de árvore hierárquica, que, geralmente, reflete
+a organização da empresa. Cada "nó" da árvore é uma entrada e pode ter um tipo e vários
+valores, além de "redirecionar" o usuário para outros nós. Cada nó é identificado
+por um \textit{Distinguished Name} (dn), que é formado através do nome do nó concatenado
+aos nós superiores.\cite{openldap}
+
 
 \section{Solução e Desenvolvimento}
 
+A solução do problema do LAPPIS consiste em instanciar o \textit{WPA Enterprise}
+com os seguintes elementos:
+
+\begin{itemize}
+    \item servidor Radius
+    \item configuração do cliente Radius, NAS ("roteador" do LAPPIS)
+    \item servidor LDAP
+    \item integração Radius e LDAP
+    \item interface para criação/desativação de usuários
+\end{itemize}
+
 \section{Dificuldades}
+
+O grupo teve dificuldades, no primeiro momento, em "subir" o servidor Radius,
+dado que vários dos tutoriais da internet são ultrapassados. Por causa disso,
+a autenticação não funcionava corretamente e o serviço estava muito lento.
+Um novo tutorial foi encontrado e o grupo percebeu que as configurações que
+vinham na instalação dos pacotes já fazia com que o Radius funcionasse corretamente
+\textit{out-of-the-box}.
+
+Após isso, "levantar" o servidor LDAP também foi complicado, devido a pouca
+experiência que os integrantes do grupo tinham.
+A parte mais complexa foi integrar os dois servidores de forma correta.
 
 \section{Resultados}
 
