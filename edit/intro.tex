@@ -7,16 +7,29 @@ de um servidor RADIUS e LDAP, a solução encontrada para a implementação do p
 desenvolvimento feito até a finalização do trabalho, dificuldades encontradas durante o
 desenvolvimento e os resultados encontrados.
 
+Como foi visto em sala de aula, apesar de uma encriptação de chave compartilhada
+ser melhor que não ter encriptação alguma, algumas falhas de segurança podem ser
+observadas.
+
 
 \subsection{O Problema}
 
 Em um contexto de uma empresa, a distribuição de internet por Wireless é um ponto de
 vulnerabilidade para a rede local. Na maior parte dos casos, uma rede Wifi é protegida
-utilizando o protocolo WPA2, que consiste na proteção do acesso a internet com uma
-chave secreta. Entretanto, esse método de segurança pode ser facilmente quebrado com
-a descoberta da chave por métodos computacionais ou não computacionais. Nesse cenário,
-visa-se a implementação de um sistema de autenticação de usuários por senha. Usuários
-não autorizados são bloqueados.
+utilizando o protocolo WPA2 Pre-Shared Key (PSK), que consiste na proteção do acesso a internet com uma
+chave secreta compartilhada. Isso significa que todos os usuários daquela rede terão acesso
+sua conexão criptografada com a mesma chave, que não pode ser revogada. \cite{freeradius}
+
+Especialmente num ambiente corporativo, onde se tem alta rotatividade de pessoas,
+o PSK não é o modelo mais seguro de conexão com a internet. Um usuário que não tem
+mais vínculo com a empresa não deveria ter mais acesso à rede e o único jeito de se
+fazer isto com o PSK é mudando a chave de acesso, que causa um grande \textir{overhead}
+para os usuários e não garante muito mais segurança, já que um atacante pode realizar
+ataques offline para descobrir a chave \cite{freeradius}
+
+Para resolver este problema, a IEEE, ao descrever os padrões para internet sem fio,
+previu um modelo "Empresarial" que difere do PSK no sentido de usar autenticação
+por usuário e por sessão \cite{freeradius}
 
 \section{Radius}
 
@@ -64,3 +77,4 @@ O modelo da X.500 de 1993 é implementado no LDAP e consiste em:
 
 \section{Resultados}
 
+\bibliography{edit/refs}
