@@ -10,6 +10,14 @@ desenvolvimento e os resultados encontrados.
 
 \section{O Problema}
 
+Em um contexto de uma empresa, a distribuição de internet por Wireless é um ponto de
+vulnerabilidade para a rede local. Na maior parte dos casos, uma rede Wifi é protegida
+utilizando o protocolo WPA2, que consiste na proteção do acesso a internet com uma
+chave secreta. Entretanto, esse método de segurança pode ser facilmente quebrado com
+a descoberta da chave por métodos computacionais ou não computacionais. Nesse cenário,
+visa-se a implementação de um sistema de autenticação de usuários por senha. Usuários
+não autorizados são bloqueados.
+
 \subsection{Radius}
 
 O protocolo Remote Authentication Dial-in User Service (RADIUS) foi desenvolvido pela
@@ -33,6 +41,22 @@ serem enviadas do cliente ao servidor, eliminando a possibilidade de roubo de in
 com snoops de rede.
 
 \subsection{LDAP}
+
+O protocolo Lightweight Directory Access Protocol (LDAP) foi desenvolvido especificamente
+para simples leituras/escritas para o X.500 Directory, e é um complemento pra o Directory
+Access Protocol (DAP). O X.500 Directory é uma série de padrões de rede que aborda serviço
+de diretório. O LDAP utiliza-se do TCP para o transporte de diretórios pela rede e os dados
+são codificados como strings (Distinguished Names).
+
+O modelo da X.500 de 1993 é implementado no LDAP e consiste em:
+\begin{itemize}
+  \item Uma entrada contem vários atributos;
+  \item Um atributo tem um nome e um ou mais valores. Os atributos são definidos nos schemas;
+  \item Cada entrada tem um identificador único: Distinguished Name (DN). Consiste de um
+    Relative Distinguished Name (RDN), construído de alguns atributos seguidos do DN pai.
+    O DN pode ser comparado com um caminho de um arquivo e o RDN o nome relativo do arquivo.
+    (temos /foo/bar/file.txt como DN e file.txt como RDN).
+\end{itemize}
 
 \section{Solução e Desenvolvimento}
 
