@@ -23,19 +23,24 @@ sua conexão criptografada com a mesma chave, que não pode ser revogada. \cite{
 Especialmente num ambiente corporativo, onde se tem alta rotatividade de pessoas,
 o PSK não é o modelo mais seguro de conexão com a internet. Um usuário que não tem
 mais vínculo com a empresa não deveria ter mais acesso à rede e o único jeito de se
-fazer isto com o PSK é mudando a chave de acesso, que causa um grande \textir{overhead}
+fazer isto com o PSK é mudando a chave de acesso, que causa um grande \textit{overhead}
 para os usuários e não garante muito mais segurança, já que um atacante pode realizar
 ataques offline para descobrir a chave \cite{freeradius}
 
 Para resolver este problema, a IEEE, ao descrever os padrões para internet sem fio,
 previu um modelo "Empresarial" que difere do PSK no sentido de usar autenticação
-por usuário e por sessão \cite{freeradius}
+por usuário e por sessão \cite{freeradius}. Este modelo também permite revogação de
+acesso e a separação dos usuários por grupos (criando diferente VLANs, por exemplo). \cite{freeradius}
+
+No contexto da disciplina, foi implementado a autenticação empresarial no LAPPIS,
+um laboratório de desenvolvimento de software da FGA, que enfrenta alguns dos
+problemas citados anteriormente.
 
 \section{Radius}
 
 O protocolo Remote Authentication Dial-in User Service (RADIUS) foi desenvolvido pela
 Livingston Enterprises Inc. como um servidor de acesso e autenticação. RADIUS é um
-protocolo cliente/servidor. O cliente é tipicamente um Network Access Server (NAS) que
+protocolo cliente/servidor. \cite{radius-guide} O cliente é tipicamente um Network Access Server (NAS) que
 pode ser um roteador ou outro servidor de acesso e o servidor é um processo daemon que
 pode ser instalado em um sistema UNIX ou Windows NT.
 
