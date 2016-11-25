@@ -243,4 +243,99 @@ authentication {
 \end{verbatim}
 
 
+\subsection{LDAP}
+
+Primeiramente, para instalar o OpenLdap, execute:
+\begin{verbatim}
+# apt update
+# apt install slapd ldap-utils
+\end{verbatim}
+
+Feito isso, vamos configurar o sldap com os dados do domínio, com o comando:
+
+\begin{verbatim}
+# dpkg-reconfigure slapd
+\end{verbatim}
+
+Configure de acordo com:
+\begin{itemize}
+    \item Deseja sair e não reconfigurar o openldap: No
+    \item Nome do dominio: example.com
+    \item Nome da organização: unb
+    \item Senha do dominio: admin
+    \item Confirme a senha do dominio: admin
+    \item Banco de dados que será usado para armazenar os dados: HDB
+    \item Deseja que a base existente seja removida?: No
+    \item Deseja mover os arquivos antigos para uma pasta backup?: Yes
+    \item Deseja habilitar o protocolo LDAPv2? : No
+    \item Pronto! Agora para testar, faça uma pesquisa, como:
+\end{itemize}
+
+Se tudo deu certo, basta popularmos nossa base ldap, para isso, crie um arquivo
+chamado \verb|group.ldif| e adicione o seguinte conteúdo:
+\begin{verbatim}
+dn: ou=tech,dc=example,dc=com
+ou: Group
+objectClass: organizationalUnit
+\end{verbatim}
+
+Salve o arquivo e execute o seguinte comando para adicionar estes dados à base do OpenLDAP:
+\begin{verbatim}
+$ ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f ~/group.ldif
+\end{verbatim}
+
+Feito isso, vamos criar alguns usuários. No nosso exemplo criamos um usuário chamado rafael e joao.
+Para isso, crie um arquivo chamado user.ldif e adicione o seguinte conteúdo:
+\begin{verbatim}
+dn: uid=jon,ou=tech,dc=example,dc=com
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Rafael Fazzolino
+uid: rafael
+uidNumber: 10000
+gidNumber: 10000
+homeDirectory: /home/rafael
+loginShell: /bin/bash
+gecos: rafael,diretor,Aguas claras,435-555-555,801-555-555
+userPassword: pass
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0
+
+dn: uid=arya,ou=tech,dc=example,dc=com
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Joao Paulo
+uid: joao
+uidNumber: 20000
+gidNumber: 20000
+homeDirectory: /home/joao
+loginShell: /bin/bash
+gecos: joao,diretor,Lago sul,435-555-555,801-555-555
+userPassword: pass
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0
+\end{verbatim}
+
+Agora adicione os dois usuários à base com o comando:
+\begin{verbatim}
+$ ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f ~/user.ldif
+\end{verbatim}
+
+Agora, para verificar se está tudo certo, execute:
+
+\begin{verbatim}
+$ ldapsearch -x -b dc=example,dc=com
+\end{verbatim}
+
+\subsection{phpldapadmin}
+
+O tutorial para configurar o phpldapadmin pode ser encontrado em \url{https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-openldap-and-phpldapadmin-on-an-ubuntu-14-04-server}
+
+
 \bibliography{edit/refs}
