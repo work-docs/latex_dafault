@@ -148,6 +148,99 @@ Após isso, "levantar" o servidor LDAP também foi complicado, devido a pouca
 experiência que os integrantes do grupo tinham.
 A parte mais complexa foi integrar os dois servidores de forma correta.
 
-\section{Resultados}
+\section{Passos para a configuração do servidor}
+
+Para configurar o Radius e o LDAP, vários tutoriais foram usados, inclusive o do
+freeradius, mas o grupo decidiu colocar aqui o dos alunos Rafael Fazzolino e João Paulo
+Ribeiro \cite{wiki}, com algumas modificações, por ter ajudado em algumas questoes de autenticação.  
+
+\subsection{Radius}
+
+Para instalar o freeRadius, execute:
+\begin{verbatim}
+# apt install freeradius freeradius-ldap
+\end{verbatim}
+
+Edite o arquivo \verb|/etc/freeradius/clients.conf|, adicionando os clientes ou as sub-redes, assim como a senha para comunicação com este servidor:
+
+\begin{verbatim}
+client 192.168.0.0/16 {
+    secret = testing123
+    shortname = unb
+    nastype = other
+}
+\end{verbatim}
+
+Edite no arquivo \verb|/etc/freeradius/modules/ldap|, adicionando a configuração do ldap:
+
+\begin{verbatim}
+ldap {
+    server = "localhost"
+    identity = "cn=admin,dc=example,dc=com"
+    password = admin
+    basedn = "dc=example,dc=com"
+    set_auth_type = yes
+}
+\end{verbatim}
+
+Edite no arquivo \verb|etc/freeradius/eap.conf|:
+\begin{verbatim}
+eap {
+    default_eap_type = peap
+    ...
+}
+
+...
+
+peap {
+    copy_requests_to_tunnel=yes
+    use_tunneled_reply=yes
+    ...
+}
+\end{verbatim}
+
+Edite o arquivo \verb|/etc/freeradius/sites-available/default|, na seção authorize descomente:
+\begin{verbatim}
+authorize {
+    ...
+    ldap
+    ...
+}
+
+...
+
+eap
+
+...
+
+authentication {
+    ...
+    Auth-Type LDAP {
+        ldap
+    }
+    ...
+}
+\end{verbatim}
+
+No arquivo \verb|/etc/freeradius/sites-available/inner-tunnel| na seção authorize descomente:
+
+\begin{verbatim}
+authorize {
+    ...
+    ldap
+    ...
+}
+
+...
+
+authentication {
+    ...
+    Auth-Type LDAP {
+        ldap
+    }
+    ...
+}
+\end{verbatim}
+
 
 \bibliography{edit/refs}
