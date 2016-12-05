@@ -204,49 +204,20 @@ se iniciar o servidor Radius:
 \end{verbatim}
 
 
-Edite o arquivo \verb|/etc/raddb/sites-available/default|, na seção authorize descomente:
+Edite o arquivo \verb|/etc/raddb/sites-available/default|, na seção authorize,
+onde está \verb|-ldap|, retire o -, deixando a entrada assim:
 \begin{verbatim}
 authorize {
     ...
+    #
+    #  The ldap module reads passwords from the LDAP database.
     ldap
     ...
 }
 
 ...
 
-eap
-
-...
-
-authentication {
-    ...
-    Auth-Type LDAP {
-        ldap
-    }
-    ...
-}
 \end{verbatim}
-
-No arquivo \verb|/etc/raddb/sites-available/inner-tunnel| na seção authorize descomente:
-
-\begin{verbatim}
-authorize {
-    ...
-    ldap
-    ...
-}
-
-...
-
-authentication {
-    ...
-    Auth-Type LDAP {
-        ldap
-    }
-    ...
-}
-\end{verbatim}
-
 
 \subsection{LDAP}
 
