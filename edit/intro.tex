@@ -155,6 +155,89 @@ versões desatualizadas de pacotes, etc. Foi decidido, então, tentar uma aborda
 
 \section{Passos para a configuração do servidor}
 
+\subsection{LDAP}
+Para configurar o LDAP, foi seguido o tutorial dos alunos Rafael Fazzolino e João Paulo
+Ribeiro \cite{wiki}, com algumas modificações.
+
+O grupo utilizou uma VM com \verb|Ubuntu 14.04 LTS|. As seguintes instalações
+foram testadas em outras versões do Ubuntu (12.04 e 16.04) e funcionaram corretamente.:
+\begin{verbatim}
+# apt update
+# apt install slapd ldap-utils
+\end{verbatim}
+
+Reconfigure o servidor rodando o seguinte comando. Responda às perguntas de acordo
+com a lista a seguir, substituindo os valores de domínio, organização e senhas, de
+acordo com suas preferências/necessidades:
+
+\begin{verbatim}
+# dpkg-reconfigure slapd
+\end{verbatim}
+
+\begin{itemize}
+    \item Deseja sair e não reconfigurar o openldap: No
+    \item Nome do dominio: example.com
+    \item Nome da organização: lappis
+    \item Senha do dominio: admin
+    \item Confirme a senha do dominio: admin
+    \item Banco de dados que será usado para armazenar os dados: HDB
+    \item Deseja que a base existente seja removida?: No
+    \item Deseja mover os arquivos antigos para uma pasta backup?: Yes
+    \item Deseja habilitar o protocolo LDAPv2? : No
+\end{itemize}
+
+
+Popule a base de dados com usuários e grupos (se desejado).
+Para isso, crie um arquivo chamado user.ldif e adicione o seguinte conteúdo:
+
+\begin{verbatim}
+dn: uid=rafael,dc=example,dc=com
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Rafael Fazzolino
+uid: rafael
+uidNumber: 10000
+gidNumber: 10000
+homeDirectory: /home/rafael
+loginShell: /bin/bash
+gecos: rafael,diretor,Aguas claras,435-555-555,801-555-555
+userPassword: pass
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0
+
+dn: uid=joao,dc=example,dc=com
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Joao Paulo
+uid: joao
+uidNumber: 20000
+gidNumber: 20000
+homeDirectory: /home/joao
+loginShell: /bin/bash
+gecos: joao,diretor,Lago sul,435-555-555,801-555-555
+userPassword: pass
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0
+\end{verbatim}
+
+Agora adicione os dois usuários à base com o comando:
+\begin{verbatim}
+$ ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f ~/user.ldif
+\end{verbatim}
+
+Agora, para verificar se está tudo certo, execute:
+
+\begin{verbatim}
+$ ldapsearch -x -b dc=example,dc=com
+\end{verbatim}
+
+
 \subsection{Radius}
 Para configurar o servidor radius, foi utilizada uma VM \verb|CentOS 7|. As seguintes
 configurações foram testadas também numa máquina rodando \verb|Antergos| (uma distribuição
@@ -183,7 +266,7 @@ entradas como estão, e só edite-as se REALMENTE souber o que está fazendo.:
 
 \begin{verbatim}
 ldap {
-    server = "localhost"
+    server = "10.0.0.2"
     port = 389
 
     base_dn = "dc=example,dc=com"
@@ -219,95 +302,6 @@ authorize {
 
 \end{verbatim}
 
-\subsection{LDAP}
-
-Primeiramente, para instalar o OpenLdap, execute:
-\begin{verbatim}
-# apt update
-# apt install slapd ldap-utils
-\end{verbatim}
-
-Feito isso, vamos configurar o sldap com os dados do domínio, com o comando:
-
-\begin{verbatim}
-# dpkg-reconfigure slapd
-\end{verbatim}
-
-Configure de acordo com:
-\begin{itemize}
-    \item Deseja sair e não reconfigurar o openldap: No
-    \item Nome do dominio: example.com
-    \item Nome da organização: unb
-    \item Senha do dominio: admin
-    \item Confirme a senha do dominio: admin
-    \item Banco de dados que será usado para armazenar os dados: HDB
-    \item Deseja que a base existente seja removida?: No
-    \item Deseja mover os arquivos antigos para uma pasta backup?: Yes
-    \item Deseja habilitar o protocolo LDAPv2? : No
-    \item Pronto! Agora para testar, faça uma pesquisa, como:
-\end{itemize}
-
-Se tudo deu certo, basta popularmos nossa base ldap, para isso, crie um arquivo
-chamado \verb|group.ldif| e adicione o seguinte conteúdo:
-\begin{verbatim}
-dn: ou=tech,dc=example,dc=com
-ou: Group
-objectClass: organizationalUnit
-\end{verbatim}
-
-Salve o arquivo e execute o seguinte comando para adicionar estes dados à base do OpenLDAP:
-\begin{verbatim}
-$ ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f ~/group.ldif
-\end{verbatim}
-
-Feito isso, vamos criar alguns usuários. No nosso exemplo criamos um usuário chamado rafael e joao.
-Para isso, crie um arquivo chamado user.ldif e adicione o seguinte conteúdo:
-\begin{verbatim}
-dn: uid=jon,ou=tech,dc=example,dc=com
-objectClass: top
-objectClass: account
-objectClass: posixAccount
-objectClass: shadowAccount
-cn: Rafael Fazzolino
-uid: rafael
-uidNumber: 10000
-gidNumber: 10000
-homeDirectory: /home/rafael
-loginShell: /bin/bash
-gecos: rafael,diretor,Aguas claras,435-555-555,801-555-555
-userPassword: pass
-shadowLastChange: 0
-shadowMax: 0
-shadowWarning: 0
-
-dn: uid=arya,ou=tech,dc=example,dc=com
-objectClass: top
-objectClass: account
-objectClass: posixAccount
-objectClass: shadowAccount
-cn: Joao Paulo
-uid: joao
-uidNumber: 20000
-gidNumber: 20000
-homeDirectory: /home/joao
-loginShell: /bin/bash
-gecos: joao,diretor,Lago sul,435-555-555,801-555-555
-userPassword: pass
-shadowLastChange: 0
-shadowMax: 0
-shadowWarning: 0
-\end{verbatim}
-
-Agora adicione os dois usuários à base com o comando:
-\begin{verbatim}
-$ ldapadd -x -W -D "cn=admin,dc=example,dc=com" -f ~/user.ldif
-\end{verbatim}
-
-Agora, para verificar se está tudo certo, execute:
-
-\begin{verbatim}
-$ ldapsearch -x -b dc=example,dc=com
-\end{verbatim}
 
 \subsection{phpldapadmin}
 
